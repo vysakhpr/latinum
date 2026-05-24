@@ -97,13 +97,13 @@ async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     await update.message.reply_text(status_text, parse_mode="HTML")
 
-async def run_report_for_file_id(update: Update, file_id: str):
+async def run_report_for_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE, file_id: str):
     """Downloads the statement from Telegram, parses it in-memory, and sends the advisor report."""
     try:
         await update.message.reply_text("⏳ Downloading and parsing your Groww statement in-memory...")
         
         # Download file as byte array
-        telegram_file = await update.message.via_bot.get_file(file_id)
+        telegram_file = await context.bot.get_file(file_id)
         file_bytes = await telegram_file.download_as_bytearray()
         
         # Parse in-memory
@@ -154,7 +154,7 @@ async def analyze_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
         
-    await run_report_for_file_id(update, file_id)
+    await run_report_for_file_id(update, context, file_id)
 
 async def invest_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Suggests an allocation for an investment amount."""
@@ -210,7 +210,7 @@ async def document_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     set_latest_file_id(doc.file_id)
     
     # Run immediate analysis
-    await run_report_for_file_id(update, doc.file_id)
+    await run_report_for_file_id(update, context, doc.file_id)
 
 def main():
     if not BOT_TOKEN:
