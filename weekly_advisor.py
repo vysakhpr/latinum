@@ -382,6 +382,9 @@ def suggest_lumpsum_allocation(amount_inr):
     if not latest_date_str:
         return "❌ Error: Database has no data. Please run daily_fetch.py first."
         
+    # Run scoring engine to ensure database is up to date for this date
+    scoring_engine.run_scoring_engine_for_all(latest_date_str)
+        
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     
