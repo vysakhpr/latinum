@@ -68,6 +68,15 @@ sudo systemctl start fund-advisor-bot.service
 
 # 6. Configure Cron Jobs (Daily fetch at 9:00 PM IST / Weekly report Friday 10:00 PM IST)
 echo "⏰ Installing cron jobs..."
+
+# Install cron package if it's missing (common in minimal cloud images)
+if ! command -v crontab &> /dev/null; then
+    echo "📦 cron utility not found. Installing cron..."
+    sudo apt-get update && sudo apt-get install -y cron
+    sudo systemctl enable cron
+    sudo systemctl start cron
+fi
+
 # Extract existing cron jobs, filter out any previous latinum entries, and append the new ones
 (crontab -l 2>/dev/null | grep -v "daily_fetch" | grep -v "weekly_advisor" || true; \
  echo "30 15 * * * cd /opt/mutual-fund-screener && /opt/mutual-fund-screener/venv/bin/python daily_fetch.py >> /var/log/fund-advisor-fetch.log 2>&1"; \
