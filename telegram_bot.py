@@ -75,7 +75,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Send me your latest Groww Mutual Funds holdings statement (as an Excel <code>.xlsx</code> document).\n\n"
         "💡 <b>Available Commands:</b>\n"
         "• /analyze or /report - Run screening using your previously uploaded statement.\n"
-        "• /lumpsum [amount] - Suggest investment split across top Flexi, Mid, and Small Cap candidates.\n"
+        "• /invest [amount] - Suggest investment split across top Flexi, Mid, and Small Cap candidates.\n"
         "• /status - Check database parameters and date ranges."
     )
     await update.message.reply_text(welcome_text, parse_mode="HTML")
@@ -156,16 +156,15 @@ async def analyze_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
     await run_report_for_file_id(update, file_id)
 
-async def lumpsum_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Suggests an allocation for a lump sum amount."""
+async def invest_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Suggests an allocation for an investment amount."""
     if not is_authorized(update):
         return
         
     if not context.args:
         await update.message.reply_text(
             "⚠️ <b>Usage:</b>\n"
-            "• <code>/lumpsum [amount]</code> (e.g. <code>/lumpsum 50000</code>)\n"
-            "• <code>/invest [amount]</code> (e.g. <code>/invest 100000</code>)",
+            "• <code>/invest [amount]</code> (e.g. <code>/invest 50000</code>)",
             parse_mode="HTML"
         )
         return
@@ -190,7 +189,7 @@ async def lumpsum_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         await update.message.reply_text(suggestion_text, parse_mode="HTML")
     except Exception as e:
-        logger.error(f"Error generating lumpsum allocation: {e}")
+        logger.error(f"Error generating investment allocation: {e}")
         await update.message.reply_text(f"💥 <b>Error generating allocation:</b> {e}")
 
 async def document_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -229,8 +228,8 @@ def main():
     application.add_handler(CommandHandler("status", status_command))
     application.add_handler(CommandHandler("analyze", analyze_command))
     application.add_handler(CommandHandler("report", analyze_command))
-    application.add_handler(CommandHandler("lumpsum", lumpsum_command))
-    application.add_handler(CommandHandler("invest", lumpsum_command))
+    application.add_handler(CommandHandler("invest", invest_command))
+    application.add_handler(CommandHandler("lumpsum", invest_command)) # Keep fallback
     application.add_handler(MessageHandler(filters.Document.ALL, document_handler))
     
     application.run_polling()
