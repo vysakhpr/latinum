@@ -204,7 +204,7 @@ async def document_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("❌ Please upload a valid Excel spreadsheet (.xlsx or .xls).")
         return
         
-    await update.message.reply_text("📥 <b>New Groww statement received!</b>")
+    await update.message.reply_text("📥 New Groww statement received!")
     
     # Save the file_id reference
     set_latest_file_id(doc.file_id)
