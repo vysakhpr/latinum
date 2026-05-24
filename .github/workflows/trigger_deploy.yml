@@ -1,0 +1,17 @@
+name: Trigger Deploy Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Emit Repository Dispatch Event
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PAT_DEPLOY_TRIGGER }}
+          repository: vysakhpr/latinum-deploy
+          event-type: deploy_trigger
