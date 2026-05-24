@@ -1,0 +1,26 @@
+# Python env
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Environment configurations
+.env
+.env.production
+.env.local
+
+# Databases and database backups
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# System files
+.DS_Store
+Thumbs.db
