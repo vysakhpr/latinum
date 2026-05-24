@@ -82,6 +82,10 @@ fi
  echo "30 15 * * * cd /opt/mutual-fund-screener && /opt/mutual-fund-screener/venv/bin/python daily_fetch.py >> /var/log/fund-advisor-fetch.log 2>&1"; \
  echo "30 16 * * 5 cd /opt/mutual-fund-screener && /opt/mutual-fund-screener/venv/bin/python weekly_advisor.py >> /var/log/fund-advisor-weekly.log 2>&1") | crontab -
 
+# 7. Run initial database seeding
+echo "📥 Running initial database fetch and scoring (this may take 1-2 minutes)..."
+./venv/bin/python daily_fetch.py
+
 echo "✅ Latinum installation completed successfully!"
 echo "-----------------------------------------------"
 sudo systemctl status fund-advisor-bot.service --no-pager
